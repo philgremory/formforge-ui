@@ -29,7 +29,7 @@ export function RepairBookingDemo() {
   const [selectedService, setSelectedService] = useState<typeof SERVICES[0] | null>(null);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedSlot, setSelectedSlot] = useState<TimeSlot | null>(null);
-  const [form, setForm] = useState({ name: "", phone: "", address: "", landmark: "", issue: "" });
+  const [form, setForm] = useState({ name: "", phone: "", email: "", address: "", landmark: "", issue: "" });
   const [booked, setBooked] = useState(false);
 
   const { slots, refreshSlots } = useBookingSlots(8, 20, 60);
@@ -49,6 +49,7 @@ export function RepairBookingDemo() {
         { id: "name", label: "Name", type: "text", required: true },
         { id: "phone", label: "Phone", type: "phone", required: true },
         { id: "address", label: "Address", type: "text", required: true },
+        { id: "email", label: "Email", type: "email", required: false },
       ], form);
       if (!valid) return;
     }
@@ -144,6 +145,7 @@ export function RepairBookingDemo() {
               {[
                 { id: "name", label: "Your Name", placeholder: "Full name", type: "text" },
                 { id: "phone", label: "Mobile Number", placeholder: "10-digit number", type: "tel" },
+                { id: "email", label: "Email (optional)", placeholder: "you@gmail.com", type: "email" },
                 { id: "address", label: "Full Address", placeholder: "House no, street, area", type: "text" },
                 { id: "landmark", label: "Landmark (optional)", placeholder: "Near school / temple...", type: "text" },
               ].map((field) => (

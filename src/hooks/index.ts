@@ -1,10 +1,6 @@
 import { useState, useCallback } from "react";
 import { TimeSlot, FormField, UseBookingSlotsReturn, UseFormValidationReturn } from "../types";
 
-// ============================================
-// useBookingSlots
-// Generates time slots for a given date
-// ============================================
 export function useBookingSlots(
   startHour = 9,
   endHour = 19,
@@ -25,15 +21,12 @@ export function useBookingSlots(
         for (let min = 0; min < 60; min += intervalMinutes) {
           const slotDate = new Date(date);
           slotDate.setHours(hour, min, 0, 0);
-
-          // Skip past times for today
           const isPast = slotDate < now;
 
           const period = hour < 12 ? "AM" : "PM";
           const displayHour = hour % 12 === 0 ? 12 : hour % 12;
           const displayMin = String(min).padStart(2, "0");
           const timeStr = `${displayHour}:${displayMin} ${period}`;
-
           const isBooked = bookedTimes.includes(timeStr);
 
           generated.push({
@@ -46,7 +39,7 @@ export function useBookingSlots(
 
       setSlots(generated);
       setSelectedSlot(null);
-      setTimeout(() => setLoading(false), 300); // small delay for UX
+      setTimeout(() => setLoading(false), 300);
     },
     [startHour, endHour, intervalMinutes, bookedTimes]
   );
@@ -60,10 +53,6 @@ export function useBookingSlots(
   };
 }
 
-// ============================================
-// useFormValidation
-// Validates form fields and manages errors
-// ============================================
 export function useFormValidation(): UseFormValidationReturn {
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -72,28 +61,43 @@ export function useFormValidation(): UseFormValidationReturn {
       const newErrors: Record<string, string> = {};
 
       fields.forEach((field) => {
-        const value = values[field.id] || "";
+        const value = (values[field.id] || "").trim();
 
-        if (field.required && !value.trim()) {
+        // Required check
+        if (field.required && !value) {
           newErrors[field.id] = `${field.label} is required`;
           return;
         }
 
-        if (field.type === "email") {
-          if (field.required && !value.trim()) {
-            newErrors[field.id] = `${field.label} is required`;
-          } else if (value.trim()) {
-            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-            if (!emailRegex.test(value.trim())) {
-              newErrors[field.id] = "Please enter a valid email (e.g. you@gmail.com)";
-            }
+        // Email validation — applies even if optional, when a value is entered
+        if (field.type === "email" && value) {
+          const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+          if (!emailRegex.test(value)) {
+            newErrors[field.id] = "Please enter a valid email (e.g. you@gmail.com)";
           }
         }
 
-        if (value && field.type === "phone") {
-          const phoneRegex = /^[6-9]\d{9}$/; // Indian mobile
+        // Phone validation — Indian 10-digit mobile
+        if (field.type === "phone" && value) {
+          const phoneRegex = /^[6-9]\d{9}$/;
           if (!phoneRegex.test(value.replace(/\s/g, ""))) {
             newErrors[field.id] = "Please enter a valid 10-digit mobile number";
+          }
+        }
+
+        // Age / positive number validation
+        if (field.id === "age" && value) {
+          const num = parseInt(value);
+          if (isNaN(num) || num < 1 || num > 120) {
+            newErrors[field.id] = "Please enter a valid age between 1 and 120";
+          }
+        }
+
+        // Travelers / nights — must be positive
+        if ((field.id === "travelers" || field.id === "nights") && value) {
+          const num = parseInt(value);
+          if (isNaN(num) || num < 1) {
+            newErrors[field.id] = `${field.label} must be at least 1`;
           }
         }
       });
@@ -105,7 +109,6 @@ export function useFormValidation(): UseFormValidationReturn {
   );
 
   const clearErrors = useCallback(() => setErrors({}), []);
-
   const setFieldError = useCallback((field: string, message: string) => {
     setErrors((prev) => ({ ...prev, [field]: message }));
   }, []);
@@ -113,53 +116,37 @@ export function useFormValidation(): UseFormValidationReturn {
   return { errors, validate, clearErrors, setFieldError };
 }
 
-// ============================================
-// useLeadEmail
-// Sends lead/booking data to an email endpoint
-// ============================================
 export function useLeadEmail() {
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const sendLead = useCallback(
-    async (endpoint: string, data: Record<string, unknown>) => {
-      setSending(true);
-      setError(null);
-
-      try {
-        const response = await fetch(endpoint, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data),
-        });
-
-        if (!response.ok) throw new Error("Failed to send");
-        setSent(true);
-      } catch (err) {
-        setError("Could not send. Please try again or contact via WhatsApp.");
-      } finally {
-        setSending(false);
-      }
-    },
-    []
-  );
+  const sendLead = useCallback(async (endpoint: string, data: Record<string, unknown>) => {
+    setSending(true);
+    setError(null);
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      if (!response.ok) throw new Error("Failed to send");
+      setSent(true);
+    } catch {
+      setError("Could not send. Please try again or contact via WhatsApp.");
+    } finally {
+      setSending(false);
+    }
+  }, []);
 
   return { sendLead, sending, sent, error, reset: () => { setSent(false); setError(null); } };
 }
 
-// ============================================
-// usePricingCalculator
-// Calculates total from selected services
-// ============================================
 export function usePricingCalculator() {
   const [items, setItems] = useState<Array<{ id: string; name: string; price: number; duration: number }>>([]);
 
   const addItem = useCallback((item: { id: string; name: string; price: number; duration: number }) => {
-    setItems((prev) => {
-      if (prev.find((i) => i.id === item.id)) return prev;
-      return [...prev, item];
-    });
+    setItems((prev) => prev.find((i) => i.id === item.id) ? prev : [...prev, item]);
   }, []);
 
   const removeItem = useCallback((id: string) => {
@@ -167,10 +154,9 @@ export function usePricingCalculator() {
   }, []);
 
   const toggle = useCallback((item: { id: string; name: string; price: number; duration: number }) => {
-    setItems((prev) => {
-      if (prev.find((i) => i.id === item.id)) return prev.filter((i) => i.id !== item.id);
-      return [...prev, item];
-    });
+    setItems((prev) =>
+      prev.find((i) => i.id === item.id) ? prev.filter((i) => i.id !== item.id) : [...prev, item]
+    );
   }, []);
 
   const total = items.reduce((sum, i) => sum + i.price, 0);

@@ -39,7 +39,10 @@ export function TravelConsultationDemo() {
 
   const handleNext = () => {
     if (step === 0 && !destination) { alert("Please select a destination"); return; }
-    if (step === 1 && !packageType) { alert("Please select a package type"); return; }
+    if (step === 1) {
+      if (!packageType) { alert("Please select a package type"); return; }
+      if (!tripDetails.date) { alert("Please select a preferred travel month"); return; }
+    }
     if (step === 2) {
       const valid = validate(
         [{ id: "name", label: "Name", type: "text", required: true }, { id: "phone", label: "Phone", type: "phone", required: true }, { id: "email", label: "Email", type: "email", required: false }],
@@ -128,8 +131,11 @@ export function TravelConsultationDemo() {
                 ].map((f) => (
                   <div key={f.id}>
                     <label className="text-sm font-medium text-gray-600 block mb-1">{f.label}</label>
-                    <input type={f.type} placeholder={f.placeholder} value={tripDetails[f.id as keyof typeof tripDetails]}
-                      onChange={(e) => setTripDetails(t => ({ ...t, [f.id]: e.target.value }))}
+                    <input type="text" inputMode="numeric" placeholder={f.placeholder} value={tripDetails[f.id as keyof typeof tripDetails]}
+                      onChange={(e) => {
+                        const val = e.target.value.replace(/[^0-9]/g, "");
+                        if (val === "" || parseInt(val) >= 1) setTripDetails(t => ({ ...t, [f.id]: val }));
+                      }}
                       className="w-full px-4 py-3 rounded-xl border-2 border-gray-100 focus:border-amber-300 outline-none text-sm" />
                   </div>
                 ))}

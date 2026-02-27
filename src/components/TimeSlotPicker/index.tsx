@@ -7,6 +7,18 @@ interface TimeSlotPickerProps {
   primaryColor?: string;
 }
 
+// Correctly parse "1:00 PM" → 13, "12:00 PM" → 12, "12:00 AM" → 0
+function getHour24(timeStr: string): number {
+  const [timePart, period] = timeStr.split(" ");
+  let [hour] = timePart.split(":").map(Number);
+  if (period === "AM") {
+    if (hour === 12) hour = 0;
+  } else {
+    if (hour !== 12) hour += 12;
+  }
+  return hour;
+}
+
 export function TimeSlotPicker({
   slots,
   selectedSlot,
@@ -14,16 +26,16 @@ export function TimeSlotPicker({
   primaryColor = "#6366f1",
 }: TimeSlotPickerProps) {
   const morningSlots = slots.filter((s) => {
-    const hour = parseInt(s.time);
-    return hour < 12;
+    const h = getHour24(s.time);
+    return h >= 5 && h < 12;
   });
   const afternoonSlots = slots.filter((s) => {
-    const hour = parseInt(s.time);
-    return hour >= 12 && hour < 17;
+    const h = getHour24(s.time);
+    return h >= 12 && h < 17;
   });
   const eveningSlots = slots.filter((s) => {
-    const hour = parseInt(s.time);
-    return hour >= 17;
+    const h = getHour24(s.time);
+    return h >= 17;
   });
 
   const renderGroup = (label: string, group: TimeSlot[]) => {

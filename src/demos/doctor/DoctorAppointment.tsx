@@ -27,7 +27,7 @@ export function DoctorAppointmentDemo() {
   const [selectedDoctor, setSelectedDoctor] = useState<typeof DOCTORS[0] | null>(null);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedSlot, setSelectedSlot] = useState<TimeSlot | null>(null);
-  const [form, setForm] = useState({ name: "", age: "", phone: "", symptoms: "" });
+  const [form, setForm] = useState({ name: "", age: "", phone: "", email: "", symptoms: "" });
   const [booked, setBooked] = useState(false);
 
   const { slots, refreshSlots } = useBookingSlots(9, 17, 20);
@@ -47,6 +47,7 @@ export function DoctorAppointmentDemo() {
         [
           { id: "name", label: "Patient Name", type: "text", required: true },
           { id: "phone", label: "Phone", type: "phone", required: true },
+          { id: "email", label: "Email", type: "email", required: false },
         ],
         form
       );
@@ -143,6 +144,7 @@ export function DoctorAppointmentDemo() {
                 { id: "name", label: "Patient Name", placeholder: "Full name", type: "text" },
                 { id: "age", label: "Age", placeholder: "e.g. 28", type: "text" },
                 { id: "phone", label: "Mobile Number", placeholder: "10-digit number", type: "tel" },
+                { id: "email", label: "Email (optional)", placeholder: "you@gmail.com", type: "email" },
               ].map((field) => (
                 <div key={field.id}>
                   <label className="text-sm font-medium text-gray-600 block mb-1">{field.label}</label>
@@ -150,7 +152,18 @@ export function DoctorAppointmentDemo() {
                     type={field.type}
                     placeholder={field.placeholder}
                     value={form[field.id as keyof typeof form]}
-                    onChange={(e) => setForm(f => ({ ...f, [field.id]: e.target.value }))}
+                    onChange={(e) => {
+                    const val = e.target.value;
+                    if (field.id === 'age') {
+                      // Only allow digits, max 3 chars, range 1-120
+                      const num = val.replace(/[^0-9]/g, '');
+                      if (num === '' || (parseInt(num) >= 1 && parseInt(num) <= 120)) {
+                        setForm(f => ({ ...f, [field.id]: num }));
+                      }
+                    } else {
+                      setForm(f => ({ ...f, [field.id]: val }));
+                    }
+                  }}
                     
                     
                     className={`w-full px-4 py-3 rounded-xl border-2 outline-none transition text-sm
