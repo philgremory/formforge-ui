@@ -1,0 +1,44 @@
+{
+  "name": "formforge-ui",
+  "version": "1.0.0",
+  "description": "Open-source UI library for booking systems, appointment forms, and service business widgets",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "lint": "eslint src --ext ts,tsx"
+  },
+  "keywords": [
+    "booking",
+    "appointment",
+    "form",
+    "widget",
+    "react",
+    "typescript",
+    "salon",
+    "scheduling"
+  ],
+  "author": "Tech Twin Mark",
+  "license": "MIT",
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "@vitejs/plugin-react": "^4.0.0",
+    "autoprefixer": "^10.4.14",
+    "postcss": "^8.4.24",
+    "tailwindcss": "^3.3.2",
+    "typescript": "^5.0.2",
+    "vite": "^4.4.5"
+  },
+  "dependencies": {
+    "clsx": "^2.0.0"
+  }
+}
