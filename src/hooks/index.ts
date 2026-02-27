@@ -79,10 +79,14 @@ export function useFormValidation(): UseFormValidationReturn {
           return;
         }
 
-        if (value && field.type === "email") {
-          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-          if (!emailRegex.test(value)) {
-            newErrors[field.id] = "Please enter a valid email address";
+        if (field.type === "email") {
+          if (field.required && !value.trim()) {
+            newErrors[field.id] = `${field.label} is required`;
+          } else if (value.trim()) {
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            if (!emailRegex.test(value.trim())) {
+              newErrors[field.id] = "Please enter a valid email (e.g. you@gmail.com)";
+            }
           }
         }
 

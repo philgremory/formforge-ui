@@ -77,14 +77,7 @@ export default function App() {
 
       {/* Footer */}
       <div className="mt-12 text-center text-gray-600 text-sm">
-        <p>Built with ❤️ by <span className="text-gray-400">Tech Twin Mark</span></p>
-        <p className="mt-1">
-          <a href="https://github.com" className="text-indigo-400 hover:underline">GitHub</a>
-          {" · "}
-          <a href="https://npmjs.com" className="text-indigo-400 hover:underline">npm</a>
-          {" · "}
-          <a href="#" className="text-indigo-400 hover:underline">Docs</a>
-        </p>
+        <p>Built with ❤️ by <span className="text-gray-400">Phil Gremory</span></p>
       </div>
     </div>
   );

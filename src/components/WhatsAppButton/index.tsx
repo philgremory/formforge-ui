@@ -1,5 +1,5 @@
 interface WhatsAppButtonProps {
-  phoneNumber: string;          // e.g. "919876543210" (with country code, no +)
+  phoneNumber: string;          // e.g. "917208788981" (with country code, no +)
   message?: string;
   position?: "bottom-right" | "bottom-left";
   label?: string;

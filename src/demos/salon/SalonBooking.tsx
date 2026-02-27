@@ -64,6 +64,7 @@ export function SalonBookingDemo() {
         [
           { id: "name", label: "Name", type: "text", required: true },
           { id: "phone", label: "Phone", type: "phone", required: true },
+          { id: "email", label: "Email", type: "email", required: false },
         ],
         form
       );
@@ -87,7 +88,7 @@ export function SalonBookingDemo() {
             <p className="text-sm"><span className="text-gray-400">Total:</span> <span className="font-bold text-fuchsia-600">₹{selectedServices.reduce((s, sv) => s + sv.price, 0)}</span></p>
           </div>
           <WhatsAppConfirm
-            phoneNumber="919876543210"
+            phoneNumber="917208788981"
             businessName="Glamour Studio"
             bookingDetails={{
               Services: selectedServices.map((s) => s.name).join(", "),
@@ -98,7 +99,7 @@ export function SalonBookingDemo() {
             }}
           />
         </div>
-        <WhatsAppButton phoneNumber="919876543210" message="Hello Glamour Studio!" />
+        <WhatsAppButton phoneNumber="917208788981" message="Hello Glamour Studio!" />
       </div>
     );
   }
@@ -229,7 +230,7 @@ export function SalonBookingDemo() {
           )}
         </StepWizard>
       </div>
-      <WhatsAppButton phoneNumber="919876543210" />
+      <WhatsAppButton phoneNumber="917208788981" />
     </div>
   );
 }

@@ -71,7 +71,7 @@ export function DoctorAppointmentDemo() {
             <p className="text-sm font-bold flex justify-between"><span>Consultation Fee:</span> <span className="text-sky-600">₹{selectedDoctor?.fee}</span></p>
           </div>
           <WhatsAppConfirm
-            phoneNumber="919876543210"
+            phoneNumber="917208788981"
             businessName="MediCare Clinic"
             bookingDetails={{
               Doctor: selectedDoctor?.name || "",
@@ -81,7 +81,7 @@ export function DoctorAppointmentDemo() {
             }}
           />
         </div>
-        <WhatsAppButton phoneNumber="919876543210" />
+        <WhatsAppButton phoneNumber="917208788981" />
       </div>
     );
   }
@@ -141,7 +141,7 @@ export function DoctorAppointmentDemo() {
               <h3 className="font-semibold text-gray-700 mb-1">Patient Information</h3>
               {[
                 { id: "name", label: "Patient Name", placeholder: "Full name", type: "text" },
-                { id: "age", label: "Age", placeholder: "Age in years", type: "number" },
+                { id: "age", label: "Age", placeholder: "e.g. 28", type: "text" },
                 { id: "phone", label: "Mobile Number", placeholder: "10-digit number", type: "tel" },
               ].map((field) => (
                 <div key={field.id}>
@@ -151,6 +151,8 @@ export function DoctorAppointmentDemo() {
                     placeholder={field.placeholder}
                     value={form[field.id as keyof typeof form]}
                     onChange={(e) => setForm(f => ({ ...f, [field.id]: e.target.value }))}
+                    
+                    
                     className={`w-full px-4 py-3 rounded-xl border-2 outline-none transition text-sm
                       ${errors[field.id] ? "border-red-300 bg-red-50" : "border-gray-100 focus:border-sky-300"}`}
                   />
@@ -192,7 +194,7 @@ export function DoctorAppointmentDemo() {
           )}
         </StepWizard>
       </div>
-      <WhatsAppButton phoneNumber="919876543210" message="Hello! I need to book a doctor appointment." />
+      <WhatsAppButton phoneNumber="917208788981" message="Hello! I need to book a doctor appointment." />
     </div>
   );
 }

@@ -42,7 +42,7 @@ export function TravelConsultationDemo() {
     if (step === 1 && !packageType) { alert("Please select a package type"); return; }
     if (step === 2) {
       const valid = validate(
-        [{ id: "name", label: "Name", type: "text", required: true }, { id: "phone", label: "Phone", type: "phone", required: true }],
+        [{ id: "name", label: "Name", type: "text", required: true }, { id: "phone", label: "Phone", type: "phone", required: true }, { id: "email", label: "Email", type: "email", required: false }],
         contact
       );
       if (!valid) return;
@@ -65,7 +65,7 @@ export function TravelConsultationDemo() {
             <p className="text-sm"><span className="text-gray-400">Est. from:</span> <span className="font-bold text-amber-600">₹{destination?.from.toLocaleString()} per person</span></p>
           </div>
           <WhatsAppConfirm
-            phoneNumber="919876543210"
+            phoneNumber="917208788981"
             businessName="Traveleezz"
             bookingDetails={{
               Destination: `${destination?.emoji} ${destination?.name}`,
@@ -77,7 +77,7 @@ export function TravelConsultationDemo() {
             }}
           />
         </div>
-        <WhatsAppButton phoneNumber="919876543210" message="Hi Traveleezz! I want to plan a trip." />
+        <WhatsAppButton phoneNumber="917208788981" message="Hi Traveleezz! I want to plan a trip." />
       </div>
     );
   }
@@ -207,7 +207,7 @@ export function TravelConsultationDemo() {
           )}
         </StepWizard>
       </div>
-      <WhatsAppButton phoneNumber="919876543210" message="Hi! I want to plan a trip with Traveleezz." />
+      <WhatsAppButton phoneNumber="917208788981" message="Hi! I want to plan a trip with Traveleezz." />
     </div>
   );
 }

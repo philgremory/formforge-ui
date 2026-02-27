@@ -70,7 +70,7 @@ export function RepairBookingDemo() {
             <p className="text-sm font-bold flex justify-between"><span>Visit Charge:</span> <span className="text-emerald-600">₹{selectedService?.price}</span></p>
           </div>
           <WhatsAppConfirm
-            phoneNumber="919876543210"
+            phoneNumber="917208788981"
             businessName="FixIt Express"
             bookingDetails={{
               Service: `${selectedService?.icon} ${selectedService?.name}`,
@@ -82,7 +82,7 @@ export function RepairBookingDemo() {
             }}
           />
         </div>
-        <WhatsAppButton phoneNumber="919876543210" />
+        <WhatsAppButton phoneNumber="917208788981" />
       </div>
     );
   }
@@ -193,7 +193,7 @@ export function RepairBookingDemo() {
           )}
         </StepWizard>
       </div>
-      <WhatsAppButton phoneNumber="919876543210" message="Hi FixIt Express! I need a repair service." />
+      <WhatsAppButton phoneNumber="917208788981" message="Hi FixIt Express! I need a repair service." />
     </div>
   );
 }
